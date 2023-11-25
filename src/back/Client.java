@@ -36,13 +36,11 @@ public class Client {
     public void buscarCambios(String direccionDestino) {
 
         Thread hilo = new Thread(() -> {
-            String prueba = "a";
             try {
                 InterfazRemota interfaz
                         = (InterfazRemota) Naming.lookup("//"
                                 + direccionDestino + ":" + "1234/ChatRMI");
                 while (true) {
-                    prueba=interfaz.broadcast();
                     if (!interfaz.broadcast().equals(historial) ) {
                         historial = interfaz.broadcast();
                         System.out.println(historial);
@@ -78,4 +76,38 @@ public class Client {
             System.out.println("Hubo un problema " + e);
         }
     }
+
+    public String getHistorial() {
+        return historial;
+    }
+
+    public void setHistorial(String historial) {
+        this.historial = historial;
+    }
+
+    public String getNuevoMensaje() {
+        return nuevoMensaje;
+    }
+
+    public void setNuevoMensaje(String nuevoMensaje) {
+        this.nuevoMensaje = nuevoMensaje;
+    }
+
+    public String getDireccionIP() {
+        return direccionIP;
+    }
+
+    public void setDireccionIP(String direccionIP) {
+        this.direccionIP = direccionIP;
+    }
+
+    public String getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+    }
+    
+    
 }
