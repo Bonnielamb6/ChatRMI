@@ -36,12 +36,14 @@ public class Client {
     public void buscarCambios(String direccionDestino) {
 
         Thread hilo = new Thread(() -> {
+            String prueba = "a";
             try {
                 InterfazRemota interfaz
                         = (InterfazRemota) Naming.lookup("//"
                                 + direccionDestino + ":" + "1234/ChatRMI");
                 while (true) {
-                    if (interfaz.broadcast() != historial) {
+                    prueba=interfaz.broadcast();
+                    if (!interfaz.broadcast().equals(historial) ) {
                         historial = interfaz.broadcast();
                         System.out.println(historial);
                     }
