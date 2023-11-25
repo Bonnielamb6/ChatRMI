@@ -11,8 +11,10 @@ import java.rmi.RemoteException;
  *
  * @author PC
  */
-public interface Interface extends Remote {
+public interface InterfazRemota extends Remote {
+    
     public void broadcast() throws RemoteException;
-    public void actualizarMensajes() throws RemoteException;
-    public void recibirMensaje() throws RemoteException;
+    
+    public void actualizar(String mensajeTemp) throws RemoteException;
+    
 }
