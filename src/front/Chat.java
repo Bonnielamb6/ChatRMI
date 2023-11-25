@@ -111,7 +111,8 @@ public class Chat extends javax.swing.JFrame {
             InterfazRemota interfaz
                     = (InterfazRemota) Naming.lookup("//"
                             + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
-            interfaz.actualizar(txtAMensaje.toString());
+            System.out.println(txtAMensaje.getText());
+            interfaz.actualizar(txtAMensaje.getText());
         } catch (Exception e) {
             System.out.println("Hubo un error " + e);
         }
