@@ -24,8 +24,6 @@ public class Client {
         direccionIP = "127.0.0.1";
         puerto = "1234";
     }
-    
-    
 
     public void mandarMensaje(String mensajeTemp, String direccionDestino, String puertoDestino) {
 
@@ -36,18 +34,21 @@ public class Client {
     }
 
     public void buscarCambios(String direccionDestino) {
-        
+
         Thread hilo = new Thread(() -> {
             try {
-            InterfazRemota interfaz
-                    = (InterfazRemota) Naming.lookup("//"
-                            + direccionDestino + ":" + "1234/ChatRMI");
-            if(interfaz.broadcast() != historial){
-                historial = interfaz.broadcast();
+                InterfazRemota interfaz
+                        = (InterfazRemota) Naming.lookup("//"
+                                + direccionDestino + ":" + "1234/ChatRMI");
+                while (true) {
+                    if (interfaz.broadcast() != historial) {
+                        historial = interfaz.broadcast();
+                        System.out.println(historial);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Hubo un error " + e);
             }
-        } catch (Exception e) {
-            System.out.println("Hubo un error " + e);
-        }
         });
         hilo.start();
     }
@@ -62,13 +63,12 @@ public class Client {
         direccionDestino = sc.nextLine();
         cliente.buscarCambios(direccionDestino);
         try {
+            InterfazRemota interfaz
+                    = (InterfazRemota) Naming.lookup("//"
+                            + direccionDestino + ":" + "1234/ChatRMI");
             while (!"99".equals(mensaje)) {
 
                 mensaje = sc.nextLine();
-                InterfazRemota interfaz
-                        = (InterfazRemota) Naming.lookup("//"
-                                + direccionDestino + ":" + "1234/ChatRMI");
-
                 interfaz.actualizar(mensaje);
                 System.out.println(interfaz.broadcast());
             }
