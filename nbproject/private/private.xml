@@ -4,7 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/PC/Documents/NetBeansProjects/ChatRMI/src/back/Client.java</file>
-            <file>file:/C:/Users/PC/Documents/NetBeansProjects/ChatRMI/src/back/Server.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/ChatRMI/src/back/ClaseRemota.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/ChatRMI/src/back/InterfazRemota.java</file>
         </group>
     </open-files>
 </project-private>

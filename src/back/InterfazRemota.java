@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
  */
 public interface InterfazRemota extends Remote {
     
-    public void broadcast() throws RemoteException;
+    public String broadcast() throws RemoteException;
     
     public void actualizar(String mensajeTemp) throws RemoteException;
     
