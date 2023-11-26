@@ -18,6 +18,7 @@ public class Chat extends javax.swing.JFrame {
 
     Client cliente = new Client();
     String direccion = "127.0.0.1";
+
     /**
      * Creates new form Chat
      */
@@ -112,7 +113,7 @@ public class Chat extends javax.swing.JFrame {
 
     private void btnCambiarIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarIPActionPerformed
         // TODO add your handling code here:
-        direccion= JOptionPane.showInputDialog("Escribe la direccion IP a la que mandaras mensaje").toString();
+        direccion = JOptionPane.showInputDialog("Escribe la direccion IP a la que mandaras mensaje").toString();
         cliente.setDireccionIP(direccion);
         if (checkServer.isSelected()) {
             ejecucion();
@@ -145,6 +146,8 @@ public class Chat extends javax.swing.JFrame {
                     if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
                         cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                         System.out.println(cliente.getHistorialIndividual());
+                        txtAHistorial.setText(cliente.getHistorialIndividual());
+
                     }
                 }
             } catch (Exception e) {
@@ -154,7 +157,7 @@ public class Chat extends javax.swing.JFrame {
         hilo.start();
     }
 
-public void ejecucion() {
+    public void ejecucion() {
         Thread hilo = new Thread(() -> {
             try {
                 InterfazRemota interfaz
@@ -188,27 +191,23 @@ public void ejecucion() {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Chat.class  
+            java.util.logging.Logger.getLogger(Chat.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Chat.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Chat.class  
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Chat.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Chat.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Chat.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Chat.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
