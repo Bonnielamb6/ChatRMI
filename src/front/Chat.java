@@ -9,6 +9,7 @@ import back.InterfazRemota;
 import back.InterfazRemotaCliente;
 import java.rmi.Naming;
 import javax.swing.JOptionPane;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -16,14 +17,21 @@ import javax.swing.JOptionPane;
  */
 public class Chat extends javax.swing.JFrame {
 
-    Client cliente = new Client();
+    Client cliente;
     String direccion = "127.0.0.1";
 
     /**
      * Creates new form Chat
      */
     public Chat() {
+        try {
+            cliente = new Client();
+        } catch (RemoteException e) {
+            // Manejar la excepción aquí, por ejemplo, imprimir el mensaje de error
+            e.printStackTrace();
+        }
         initComponents();
+        cliente.levantarServicio();
     }
 
     /**

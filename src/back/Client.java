@@ -5,13 +5,17 @@
 package back;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 /**
  *
  * @author PC
  */
-public class Client implements InterfazRemotaCliente{
+public class Client extends UnicastRemoteObject implements InterfazRemotaCliente{
 
     String historial;
     String nuevoMensaje;
@@ -19,7 +23,7 @@ public class Client implements InterfazRemotaCliente{
     String puerto;
     String historialIndividual;
 
-    public Client() {
+    public Client() throws RemoteException{
         historial = "";
         historialIndividual ="";
         nuevoMensaje = "";
@@ -39,6 +43,21 @@ public class Client implements InterfazRemotaCliente{
         return historialIndividual;
     }
 
+    public void levantarServicio(){
+        try {
+            Registry registry = LocateRegistry.createRegistry(
+                    Integer.parseInt("1234"));
+
+            InterfazRemotaCliente mir = new Client();
+
+            java.rmi.Naming.rebind("//"
+                    + java.net.InetAddress.getLocalHost().getHostAddress()
+                    + ":1234/ChatRMI", mir);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
     public void buscarCambiosIndividuales(String direccionDestino){
         Thread hilo = new Thread(() -> {
             try {
@@ -78,29 +97,29 @@ public class Client implements InterfazRemotaCliente{
         hilo.start();
     }
 
-    public static void main(String[] args) {
-        Client cliente = new Client();
-        String direccionDestino = "127.0.0.1";
-        String mensaje = "no hay mensaje";
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Escribe la direccion de destino");
-        direccionDestino = sc.nextLine();
-        cliente.buscarCambios(direccionDestino);
-        try {
-            InterfazRemota interfaz
-                    = (InterfazRemota) Naming.lookup("//"
-                            + direccionDestino + ":" + "1234/ChatRMI");
-            while (cliente.direccionIP == direccionDestino) {
-
-                mensaje = sc.nextLine();
-                interfaz.actualizar(mensaje);
-                System.out.println(interfaz.broadcast());
-            }
-        } catch (Exception e) {
-            System.out.println("Hubo un problema " + e);
-        }
-    }
+//    public static void main(String[] args) throws RemoteException {
+//        Client cliente = new Client();
+//        String direccionDestino = "127.0.0.1";
+//        String mensaje = "no hay mensaje";
+//        Scanner sc = new Scanner(System.in);
+//
+//        System.out.println("Escribe la direccion de destino");
+//        direccionDestino = sc.nextLine();
+//        cliente.buscarCambios(direccionDestino);
+//        try {
+//            InterfazRemota interfaz
+//                    = (InterfazRemota) Naming.lookup("//"
+//                            + direccionDestino + ":" + "1234/ChatRMI");
+//            while (cliente.direccionIP == direccionDestino) {
+//
+//                mensaje = sc.nextLine();
+//                interfaz.actualizar(mensaje);
+//                System.out.println(interfaz.broadcast());
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Hubo un problema " + e);
+//        }
+//    }
 
     public String getHistorial() {
         return historial;
