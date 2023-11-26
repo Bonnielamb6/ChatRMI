@@ -125,15 +125,28 @@ public class Chat extends javax.swing.JFrame {
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         // TODO add your handling code here:
-        try {
-            InterfazRemota interfaz
-                    = (InterfazRemota) Naming.lookup("//"
-                            + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
-            System.out.println(txtAMensaje.getText());
-            interfaz.actualizar(txtAMensaje.getText());
-        } catch (Exception e) {
-            System.out.println("Hubo un error " + e);
+        if (checkServer.isSelected()) {
+            try {
+                InterfazRemota interfaz
+                        = (InterfazRemota) Naming.lookup("//"
+                                + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
+                System.out.println(txtAMensaje.getText());
+                interfaz.actualizar(txtAMensaje.getText());
+            } catch (Exception e) {
+                System.out.println("Hubo un error " + e);
+            }
+        } else {
+            try {
+                InterfazRemotaCliente interfaz
+                        = (InterfazRemotaCliente) Naming.lookup("//"
+                                + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
+                System.out.println(txtAMensaje.getText());
+                interfaz.recibirMensajes(txtAMensaje.getText());
+            } catch (Exception e) {
+                System.out.println("Hubo un error " + e);
+            }
         }
+
     }//GEN-LAST:event_btnEnviarActionPerformed
 
     public void ejecucionIndividual() {
