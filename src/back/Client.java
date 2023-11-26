@@ -133,6 +133,14 @@ public class Client implements InterfazRemotaCliente{
     public void setPuerto(String puerto) {
         this.puerto = puerto;
     }
+
+    public String getHistorialIndividual() {
+        return historialIndividual;
+    }
+
+    public void setHistorialIndividual(String historialIndividual) {
+        this.historialIndividual = historialIndividual;
+    }
     
     
 }
