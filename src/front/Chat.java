@@ -6,6 +6,7 @@ package front;
 
 import back.Client;
 import back.InterfazRemota;
+import back.InterfazRemotaCliente;
 import java.rmi.Naming;
 import javax.swing.JOptionPane;
 
@@ -16,7 +17,7 @@ import javax.swing.JOptionPane;
 public class Chat extends javax.swing.JFrame {
 
     Client cliente = new Client();
-
+    String direccion = "127.0.0.1";
     /**
      * Creates new form Chat
      */
@@ -39,6 +40,7 @@ public class Chat extends javax.swing.JFrame {
         txtAMensaje = new javax.swing.JTextArea();
         btnEnviar = new javax.swing.JButton();
         btnCambiarIP = new javax.swing.JButton();
+        checkServer = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +66,8 @@ public class Chat extends javax.swing.JFrame {
             }
         });
 
+        checkServer.setText("Hablar con servidor");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,21 +77,28 @@ public class Chat extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 10, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkServer))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnCambiarIP, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btnCambiarIP)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(checkServer)
+                        .addGap(24, 24, 24)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -101,8 +112,14 @@ public class Chat extends javax.swing.JFrame {
 
     private void btnCambiarIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarIPActionPerformed
         // TODO add your handling code here:
-        cliente.setDireccionIP(JOptionPane.showInputDialog("Escribe la direccion IP a la que mandaras mensaje").toString());
-        ejecucion();
+        direccion= JOptionPane.showInputDialog("Escribe la direccion IP a la que mandaras mensaje").toString();
+        cliente.setDireccionIP(direccion);
+        if (checkServer.isSelected()) {
+            ejecucion();
+        } else {
+            ejecucionIndividual();
+        }
+
     }//GEN-LAST:event_btnCambiarIPActionPerformed
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
@@ -118,7 +135,26 @@ public class Chat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEnviarActionPerformed
 
-    public void ejecucion() {
+    public void ejecucionIndividual() {
+        Thread hilo = new Thread(() -> {
+            try {
+                InterfazRemotaCliente interfaz
+                        = (InterfazRemotaCliente) Naming.lookup("//"
+                                + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
+                while (true) {
+                    if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
+                        cliente.setHistorialIndividual(interfaz.mensajeIndividual());
+                        System.out.println(cliente.getHistorialIndividual());
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Hubo un error " + e);
+            }
+        });
+        hilo.start();
+    }
+
+public void ejecucion() {
         Thread hilo = new Thread(() -> {
             try {
                 InterfazRemota interfaz
@@ -151,16 +187,28 @@ public class Chat extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Chat.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Chat.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Chat.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Chat.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -175,6 +223,7 @@ public class Chat extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiarIP;
     private javax.swing.JButton btnEnviar;
+    private javax.swing.JCheckBox checkServer;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea txtAHistorial;

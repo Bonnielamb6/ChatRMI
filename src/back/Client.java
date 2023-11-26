@@ -11,28 +11,53 @@ import java.util.Scanner;
  *
  * @author PC
  */
-public class Client {
+public class Client implements InterfazRemotaCliente{
 
     String historial;
     String nuevoMensaje;
     String direccionIP;
     String puerto;
+    String historialIndividual;
 
     public Client() {
         historial = "";
+        historialIndividual ="";
         nuevoMensaje = "";
         direccionIP = "127.0.0.1";
         puerto = "1234";
     }
 
     public void mandarMensaje(String mensajeTemp, String direccionDestino, String puertoDestino) {
-
+        
     }
 
     public void recibirMensajes(String mensajeTemp) {
-
+        historialIndividual += "\n"+mensajeTemp;
+    }
+    
+    public String mensajeIndividual(){
+        return historialIndividual;
     }
 
+    public void buscarCambiosIndividuales(String direccionDestino){
+        Thread hilo = new Thread(() -> {
+            try {
+                InterfazRemotaCliente interfaz
+                        = (InterfazRemotaCliente) Naming.lookup("//"
+                                + direccionDestino + ":" + "1234/ChatRMI");
+                while (true) {
+                    if (!interfaz.mensajeIndividual().equals(historialIndividual) ) {
+                        historialIndividual = interfaz.mensajeIndividual();
+                        System.out.println(historialIndividual);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Hubo un error " + e);
+            }
+        });
+        hilo.start();
+    }
+    
     public void buscarCambios(String direccionDestino) {
 
         Thread hilo = new Thread(() -> {
@@ -66,7 +91,7 @@ public class Client {
             InterfazRemota interfaz
                     = (InterfazRemota) Naming.lookup("//"
                             + direccionDestino + ":" + "1234/ChatRMI");
-            while (!"99".equals(mensaje)) {
+            while (cliente.direccionIP == direccionDestino) {
 
                 mensaje = sc.nextLine();
                 interfaz.actualizar(mensaje);
