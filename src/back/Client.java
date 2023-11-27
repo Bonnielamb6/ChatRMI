@@ -37,6 +37,7 @@ public class Client extends UnicastRemoteObject implements InterfazRemotaCliente
 
     public void recibirMensajes(String mensajeTemp) {
         historialIndividual += "\n"+mensajeTemp;
+        System.out.println(historialIndividual);
     }
     
     public String mensajeIndividual(){

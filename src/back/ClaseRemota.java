@@ -27,6 +27,7 @@ public class ClaseRemota extends UnicastRemoteObject implements
     
     
     public String broadcast() throws RemoteException{
+        System.out.println(historial);
         return historial;
     }
     
