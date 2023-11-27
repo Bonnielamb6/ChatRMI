@@ -36,6 +36,8 @@ public class Chat extends javax.swing.JFrame {
         }
         initComponents();
         levantarServicio();
+        buscarCambiosServidor();
+        buscarCambiosIndividuales();
     }
 
     /**
