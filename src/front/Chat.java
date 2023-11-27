@@ -23,6 +23,7 @@ public class Chat extends javax.swing.JFrame {
     String direccion = "127.0.0.1";
     String historialServidorActual;
     String historialIndividualActual;
+
     /**
      * Creates new form Chat
      */
@@ -143,21 +144,21 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.actualizar(txtAMensaje.getText());
-                
+
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
         } else {
             try {
-                
+
                 System.out.println(cliente.getDireccionIP());
-                
+
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.recibirMensajes(txtAMensaje.getText());
-                
+
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
@@ -165,7 +166,7 @@ public class Chat extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEnviarActionPerformed
 
-    public void levantarServicio(){
+    public void levantarServicio() {
         try {
             Registry registry = LocateRegistry.createRegistry(
                     Integer.parseInt("1235"));
@@ -179,13 +180,37 @@ public class Chat extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
+
+    public void buscarCambiosIndividuales() {
+        Thread hilo = new Thread(() -> {
+            while (true) {
+                if (cliente.getHistorialIndividual().equals(historialIndividualActual)) {
+                    txtAHistorial.setText(cliente.getHistorialIndividual());
+                    historialIndividualActual = cliente.getHistorialIndividual();
+                }
+            }
+        });
+        hilo.start();
+    }
+
+    public void buscarCambiosServidor() {
+        Thread hilo = new Thread(() -> {
+            while (true) {
+                if (cliente.getHistorial().equals(historialServidorActual)) {
+                    txtAHistorial.setText(cliente.getHistorial());
+                    historialServidorActual = cliente.getHistorial();
+                }
+            }
+        });
+        hilo.start();
+    }
+
     public void ejecucionIndividual() {
         Thread hilo = new Thread(() -> {
             try {
-                
+
                 System.out.println(cliente.getDireccionIP());
-                
+
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
