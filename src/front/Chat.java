@@ -160,7 +160,7 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.recibirMensajes(txtAMensaje.getText());
-
+                cliente.setHistorialIndividual(interfaz.mensajeIndividual());
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
