@@ -37,7 +37,7 @@ public class Chat extends javax.swing.JFrame {
         initComponents();
         levantarServicio();
         buscarCambiosServidor();
-        buscarCambiosIndividuales();
+        
     }
 
     /**
@@ -171,22 +171,19 @@ public class Chat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnviarActionPerformed
 
     public void levantarServicio() {
-        try {
-            Registry registry = LocateRegistry.createRegistry(
-                    Integer.parseInt("1235"));
-
-            InterfazRemotaCliente mir = new Client();
-
-            java.rmi.Naming.rebind("//"
-                    + java.net.InetAddress.getLocalHost().getHostAddress()
-                    + ":1235/ChatRMI", mir);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public void buscarCambiosIndividuales() {
         Thread hilo = new Thread(() -> {
+            try {
+                Registry registry = LocateRegistry.createRegistry(
+                        Integer.parseInt("1235"));
+
+                InterfazRemotaCliente mir = new Client();
+
+                java.rmi.Naming.rebind("//"
+                        + java.net.InetAddress.getLocalHost().getHostAddress()
+                        + ":1235/ChatRMI", mir);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             while (true) {
                 if (!cliente.getHistorialIndividual().equals(historialIndividualActual)) {
                     txtAHistorial.setText(cliente.getHistorialIndividual());
@@ -195,7 +192,10 @@ public class Chat extends javax.swing.JFrame {
             }
         });
         hilo.start();
+
     }
+
+    
 
     public void buscarCambiosServidor() {
         Thread hilo = new Thread(() -> {
