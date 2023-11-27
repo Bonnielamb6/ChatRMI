@@ -46,13 +46,13 @@ public class Client extends UnicastRemoteObject implements InterfazRemotaCliente
     public void levantarServicio(){
         try {
             Registry registry = LocateRegistry.createRegistry(
-                    Integer.parseInt("1234"));
+                    Integer.parseInt("1235"));
 
             InterfazRemotaCliente mir = new Client();
 
             java.rmi.Naming.rebind("//"
                     + java.net.InetAddress.getLocalHost().getHostAddress()
-                    + ":1234/ChatRMI", mir);
+                    + ":1235/ChatRMI", mir);
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -10,6 +10,8 @@ import back.InterfazRemotaCliente;
 import java.rmi.Naming;
 import javax.swing.JOptionPane;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 /**
  *
@@ -32,7 +34,7 @@ public class Chat extends javax.swing.JFrame {
             e.printStackTrace();
         }
         initComponents();
-        cliente.levantarServicio();
+        levantarServicio();
     }
 
     /**
@@ -163,8 +165,19 @@ public class Chat extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEnviarActionPerformed
 
-    public void buscarCambios(){
-        
+    public void levantarServicio(){
+        try {
+            Registry registry = LocateRegistry.createRegistry(
+                    Integer.parseInt("1235"));
+
+            InterfazRemotaCliente mir = new Client();
+
+            java.rmi.Naming.rebind("//"
+                    + java.net.InetAddress.getLocalHost().getHostAddress()
+                    + ":1235/ChatRMI", mir);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     
     public void ejecucionIndividual() {
