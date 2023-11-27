@@ -181,15 +181,16 @@ public class Chat extends javax.swing.JFrame {
                 java.rmi.Naming.rebind("//"
                         + java.net.InetAddress.getLocalHost().getHostAddress()
                         + ":1235/ChatRMI", mir);
+                while (true) {
+                if (!mir.mensajeIndividual().equals(txtAHistorial.getText())) {
+                    txtAHistorial.setText(mir.mensajeIndividual());
+                    historialIndividualActual = mir.mensajeIndividual();
+                }
+            }
             } catch (Exception e) {
                 System.out.println(e);
             }
-            while (true) {
-                if (!cliente.getHistorialIndividual().equals(historialIndividualActual)) {
-                    txtAHistorial.setText(cliente.getHistorialIndividual());
-                    historialIndividualActual = cliente.getHistorialIndividual();
-                }
-            }
+            
         });
         hilo.start();
 
@@ -217,11 +218,11 @@ public class Chat extends javax.swing.JFrame {
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 while (true) {
-                    if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
+                    if (!interfaz.mensajeIndividual().equals(txtAHistorial.getText())) {
                         cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                         //System.out.println(cliente.getHistorialIndividual());
                         txtAHistorial.setText(cliente.getHistorialIndividual());
-
+                        
                     }
                 }
             } catch (Exception e) {
