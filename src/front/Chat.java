@@ -59,6 +59,7 @@ public class Chat extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        txtAHistorial.setEditable(false);
         txtAHistorial.setColumns(20);
         txtAHistorial.setRows(5);
         jScrollPane1.setViewportView(txtAHistorial);
@@ -161,6 +162,7 @@ public class Chat extends javax.swing.JFrame {
                 System.out.println(txtAMensaje.getText());
                 interfaz.recibirMensajes(txtAMensaje.getText());
                 cliente.setHistorialIndividual(interfaz.mensajeIndividual());
+                System.out.println(cliente.getHistorialIndividual());
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
