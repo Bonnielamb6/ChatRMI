@@ -186,7 +186,7 @@ public class Chat extends javax.swing.JFrame {
     public void buscarCambiosIndividuales() {
         Thread hilo = new Thread(() -> {
             while (true) {
-                if (cliente.getHistorialIndividual().equals(historialIndividualActual)) {
+                if (!cliente.getHistorialIndividual().equals(historialIndividualActual)) {
                     txtAHistorial.setText(cliente.getHistorialIndividual());
                     historialIndividualActual = cliente.getHistorialIndividual();
                 }
@@ -198,7 +198,7 @@ public class Chat extends javax.swing.JFrame {
     public void buscarCambiosServidor() {
         Thread hilo = new Thread(() -> {
             while (true) {
-                if (cliente.getHistorial().equals(historialServidorActual)) {
+                if (!cliente.getHistorial().equals(historialServidorActual)) {
                     txtAHistorial.setText(cliente.getHistorial());
                     historialServidorActual = cliente.getHistorial();
                 }
