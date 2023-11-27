@@ -141,22 +141,21 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.actualizar(txtAMensaje.getText());
-                if(historialServidorActual!= txtAHistorial.getText()){
-                    txtAHistorial.setText(historialServidorActual);
-                }
+                
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
         } else {
             try {
+                
+                System.out.println(cliente.getDireccionIP());
+                
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
-                                + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
+                                + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.recibirMensajes(txtAMensaje.getText());
-                if(historialIndividualActual!= txtAHistorial.getText()){
-                    txtAHistorial.setText(historialIndividualActual);
-                }
+                
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
@@ -171,9 +170,12 @@ public class Chat extends javax.swing.JFrame {
     public void ejecucionIndividual() {
         Thread hilo = new Thread(() -> {
             try {
+                
+                System.out.println(cliente.getDireccionIP());
+                
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
-                                + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
+                                + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 while (true) {
                     if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
                         cliente.setHistorialIndividual(interfaz.mensajeIndividual());
