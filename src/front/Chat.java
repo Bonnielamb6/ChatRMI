@@ -59,7 +59,6 @@ public class Chat extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txtAHistorial.setEditable(false);
         txtAHistorial.setColumns(20);
         txtAHistorial.setRows(5);
         jScrollPane1.setViewportView(txtAHistorial);
@@ -186,10 +185,8 @@ public class Chat extends javax.swing.JFrame {
 
     public void buscarCambiosIndividuales() {
         Thread hilo = new Thread(() -> {
-            String prueba = "";
             while (true) {
-                prueba = cliente.getHistorialIndividual();
-                if (!prueba.equals(txtAHistorial.getText())) {
+                if (!cliente.getHistorialIndividual().equals(historialIndividualActual)) {
                     txtAHistorial.setText(cliente.getHistorialIndividual());
                     historialIndividualActual = cliente.getHistorialIndividual();
                 }
@@ -221,7 +218,7 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 while (true) {
                     if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
-                        
+                        cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                         System.out.println(cliente.getHistorialIndividual());
                         txtAHistorial.setText(cliente.getHistorialIndividual());
 
@@ -242,7 +239,7 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
                 while (true) {
                     if (!interfaz.broadcast().equals(cliente.getHistorial())) {
-                        
+                        cliente.setHistorial(interfaz.broadcast());
                         txtAHistorial.setText(cliente.getHistorial());
                     }
                 }
