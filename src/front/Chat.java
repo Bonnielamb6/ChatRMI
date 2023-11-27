@@ -145,7 +145,7 @@ public class Chat extends javax.swing.JFrame {
                 InterfazRemota interfaz
                         = (InterfazRemota) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
-                System.out.println(txtAMensaje.getText());
+                
                 interfaz.actualizar(txtAMensaje.getText());
 
             } catch (Exception e) {
@@ -154,15 +154,15 @@ public class Chat extends javax.swing.JFrame {
         } else {
             try {
 
-                System.out.println(cliente.getDireccionIP());
+                
 
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
-                System.out.println(txtAMensaje.getText());
+                
                 interfaz.recibirMensajes(txtAMensaje.getText());
                 cliente.setHistorialIndividual(interfaz.mensajeIndividual());
-                System.out.println(cliente.getHistorialIndividual());
+                //System.out.println(cliente.getHistorialIndividual());
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
@@ -213,15 +213,13 @@ public class Chat extends javax.swing.JFrame {
         Thread hilo = new Thread(() -> {
             try {
 
-                System.out.println(cliente.getDireccionIP());
-
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 while (true) {
                     if (!interfaz.mensajeIndividual().equals(cliente.getHistorialIndividual())) {
                         cliente.setHistorialIndividual(interfaz.mensajeIndividual());
-                        System.out.println(cliente.getHistorialIndividual());
+                        //System.out.println(cliente.getHistorialIndividual());
                         txtAHistorial.setText(cliente.getHistorialIndividual());
 
                     }
