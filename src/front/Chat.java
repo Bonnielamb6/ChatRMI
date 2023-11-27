@@ -19,7 +19,8 @@ public class Chat extends javax.swing.JFrame {
 
     Client cliente;
     String direccion = "127.0.0.1";
-
+    String historialServidorActual;
+    String historialIndividualActual;
     /**
      * Creates new form Chat
      */
@@ -140,6 +141,9 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.actualizar(txtAMensaje.getText());
+                if(historialServidorActual!= txtAHistorial.getText()){
+                    txtAHistorial.setText(historialServidorActual);
+                }
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
@@ -150,6 +154,9 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
                 System.out.println(txtAMensaje.getText());
                 interfaz.recibirMensajes(txtAMensaje.getText());
+                if(historialIndividualActual!= txtAHistorial.getText()){
+                    txtAHistorial.setText(historialIndividualActual);
+                }
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
             }
@@ -157,6 +164,10 @@ public class Chat extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEnviarActionPerformed
 
+    public void buscarCambios(){
+        
+    }
+    
     public void ejecucionIndividual() {
         Thread hilo = new Thread(() -> {
             try {
