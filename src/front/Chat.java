@@ -35,8 +35,8 @@ public class Chat extends javax.swing.JFrame {
             e.printStackTrace();
         }
         initComponents();
-        levantarServicio();
-        buscarCambiosServidor();
+        //levantarServicio();
+        
         
     }
 
@@ -161,7 +161,7 @@ public class Chat extends javax.swing.JFrame {
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
                 
                 interfaz.recibirMensajes(txtAMensaje.getText());
-                cliente.setHistorialIndividual(interfaz.mensajeIndividual());
+                //cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                 //System.out.println(cliente.getHistorialIndividual());
             } catch (Exception e) {
                 System.out.println("Hubo un error " + e);
