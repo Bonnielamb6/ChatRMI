@@ -24,7 +24,7 @@ public class Chat extends javax.swing.JFrame {
     String historialServidorActual;
     String historialIndividualActual;
     Boolean servicio = true;
-    
+
     /**
      * Creates new form Chat
      */
@@ -37,8 +37,7 @@ public class Chat extends javax.swing.JFrame {
         }
         initComponents();
         levantarServicio();
-        
-        
+
     }
 
     /**
@@ -152,7 +151,7 @@ public class Chat extends javax.swing.JFrame {
                 InterfazRemota interfaz
                         = (InterfazRemota) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
-                
+
                 interfaz.actualizar(txtAMensaje.getText());
 
             } catch (Exception e) {
@@ -161,12 +160,10 @@ public class Chat extends javax.swing.JFrame {
         } else {
             try {
 
-                
-
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
-                
+
                 interfaz.recibirMensajes(txtAMensaje.getText());
                 //cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                 //System.out.println(cliente.getHistorialIndividual());
@@ -179,9 +176,9 @@ public class Chat extends javax.swing.JFrame {
 
     private void checkServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkServerActionPerformed
         // TODO add your handling code here:
-        if(checkServer.isSelected()){
-            servicio=false;
-        }else{
+        if (checkServer.isSelected()) {
+            servicio = false;
+        } else {
             servicio = true;
             levantarServicio();
         }
@@ -199,21 +196,25 @@ public class Chat extends javax.swing.JFrame {
                         + java.net.InetAddress.getLocalHost().getHostAddress()
                         + ":1235/ChatRMI", mir);
                 while (servicio) {
-                if (!mir.mensajeIndividual().equals(txtAHistorial.getText())) {
-                    txtAHistorial.setText(mir.mensajeIndividual());
-                    historialIndividualActual = mir.mensajeIndividual();
+                    if (!mir.mensajeIndividual().equals(txtAHistorial.getText())) {
+                        txtAHistorial.setText(mir.mensajeIndividual());
+                        historialIndividualActual = mir.mensajeIndividual();
+                    }
+                    if (!servicio) {
+                        java.rmi.Naming.unbind("//"
+                        + java.net.InetAddress.getLocalHost().getHostAddress()
+                        + ":1235/ChatRMI");
+
+                    }
                 }
-            }
             } catch (Exception e) {
                 System.out.println(e);
             }
-            
+
         });
         hilo.start();
 
     }
-
-    
 
     public void buscarCambiosServidor() {
         Thread hilo = new Thread(() -> {
@@ -239,7 +240,7 @@ public class Chat extends javax.swing.JFrame {
                         cliente.setHistorialIndividual(interfaz.mensajeIndividual());
                         //System.out.println(cliente.getHistorialIndividual());
                         txtAHistorial.setText(cliente.getHistorialIndividual());
-                        
+
                     }
                 }
             } catch (Exception e) {
