@@ -54,6 +54,7 @@ public class Client extends UnicastRemoteObject implements InterfazRemotaCliente
             java.rmi.Naming.rebind("//"
                     + java.net.InetAddress.getLocalHost().getHostAddress()
                     + ":1235/ChatRMI", mir);
+            
         } catch (Exception e) {
             System.out.println(e);
         }

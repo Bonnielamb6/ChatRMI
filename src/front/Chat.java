@@ -153,7 +153,7 @@ public class Chat extends javax.swing.JFrame {
                 InterfazRemota interfaz
                         = (InterfazRemota) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1234/ChatRMI");
-
+                
                 interfaz.actualizar(txtAMensaje.getText());
 
             } catch (Exception e) {
@@ -161,7 +161,6 @@ public class Chat extends javax.swing.JFrame {
             }
         } else {
             try {
-
                 InterfazRemotaCliente interfaz
                         = (InterfazRemotaCliente) Naming.lookup("//"
                                 + cliente.getDireccionIP() + ":" + "1235/ChatRMI");
@@ -182,6 +181,7 @@ public class Chat extends javax.swing.JFrame {
             servicio = false;
         } else {
             servicio = true;
+            cliente.setDireccionIP("127.0.0.1");
             levantarServicio();
         }
     }//GEN-LAST:event_checkServerActionPerformed
