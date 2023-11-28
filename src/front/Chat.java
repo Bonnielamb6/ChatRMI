@@ -23,7 +23,8 @@ public class Chat extends javax.swing.JFrame {
     String direccion = "127.0.0.1";
     String historialServidorActual;
     String historialIndividualActual;
-
+    Boolean servicio = true;
+    
     /**
      * Creates new form Chat
      */
@@ -35,7 +36,7 @@ public class Chat extends javax.swing.JFrame {
             e.printStackTrace();
         }
         initComponents();
-        //levantarServicio();
+        levantarServicio();
         
         
     }
@@ -83,6 +84,11 @@ public class Chat extends javax.swing.JFrame {
         });
 
         checkServer.setText("Hablar con servidor");
+        checkServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkServerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,6 +136,7 @@ public class Chat extends javax.swing.JFrame {
         // TODO add your handling code here:
         direccion = JOptionPane.showInputDialog("Escribe la direccion IP a la que mandaras mensaje").toString();
         cliente.setDireccionIP(direccion);
+        servicio = false;
         if (checkServer.isSelected()) {
             ejecucion();
         } else {
@@ -170,6 +177,16 @@ public class Chat extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEnviarActionPerformed
 
+    private void checkServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkServerActionPerformed
+        // TODO add your handling code here:
+        if(checkServer.isSelected()){
+            servicio=false;
+        }else{
+            servicio = true;
+            levantarServicio();
+        }
+    }//GEN-LAST:event_checkServerActionPerformed
+
     public void levantarServicio() {
         Thread hilo = new Thread(() -> {
             try {
@@ -181,7 +198,7 @@ public class Chat extends javax.swing.JFrame {
                 java.rmi.Naming.rebind("//"
                         + java.net.InetAddress.getLocalHost().getHostAddress()
                         + ":1235/ChatRMI", mir);
-                while (true) {
+                while (servicio) {
                 if (!mir.mensajeIndividual().equals(txtAHistorial.getText())) {
                     txtAHistorial.setText(mir.mensajeIndividual());
                     historialIndividualActual = mir.mensajeIndividual();
