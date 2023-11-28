@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.server.ExportException;
 
 /**
  *
@@ -186,34 +188,52 @@ public class Chat extends javax.swing.JFrame {
 
     public void levantarServicio() {
         Thread hilo = new Thread(() -> {
+            Registry registry = null;
+            InterfazRemotaCliente mir = null;
+
             try {
-                Registry registry = LocateRegistry.createRegistry(
-                        Integer.parseInt("1235"));
+                // Crea el registro RMI
+                registry = LocateRegistry.createRegistry(1235);
 
-                InterfazRemotaCliente mir = new Client();
+                // Crea el objeto remoto si aún no existe
+                if (mir == null) {
+                    mir = new Client();
+                }
 
-                java.rmi.Naming.rebind("//"
-                        + java.net.InetAddress.getLocalHost().getHostAddress()
-                        + ":1235/ChatRMI", mir);
+                // Exporta el objeto remoto solo si no ha sido exportado previamente
+                try {
+                    java.rmi.Naming.rebind("//" + java.net.InetAddress.getLocalHost().getHostAddress() + ":1235/ChatRMI", mir);
+                } catch (ExportException e) {
+                    System.out.println("El objeto remoto ya está exportado.");
+                }
+
                 while (servicio) {
                     if (!mir.mensajeIndividual().equals(txtAHistorial.getText())) {
                         txtAHistorial.setText(mir.mensajeIndividual());
                         historialIndividualActual = mir.mensajeIndividual();
                     }
-                    if (!servicio) {
-                        java.rmi.Naming.unbind("//"
-                        + java.net.InetAddress.getLocalHost().getHostAddress()
-                        + ":1235/ChatRMI");
-
-                    }
                 }
             } catch (Exception e) {
                 System.out.println(e);
-            }
+            } finally {
+                try {
+                    if (mir != null) {
+                        // Desvincula el objeto remoto del registro RMI
+                        java.rmi.Naming.unbind("//" + java.net.InetAddress.getLocalHost().getHostAddress() + ":1235/ChatRMI");
 
+                        // Deshace la exportación del objeto remoto
+                        UnicastRemoteObject.unexportObject(mir, true);
+                    }
+                    if (registry != null) {
+                        // Detén el registro RMI
+                        UnicastRemoteObject.unexportObject(registry, true);
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Error al detener el registro RMI: " + ex);
+                }
+            }
         });
         hilo.start();
-
     }
 
     public void buscarCambiosServidor() {
